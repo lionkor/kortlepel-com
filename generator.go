@@ -49,7 +49,7 @@ func main() {
 		err = t.Execute(&output, data)
 		check(err)
 		fmt.Println("resulting size:", len(output.String()))
-		err = ioutil.WriteFile(prefix+".html", output.Bytes(), 0644)
+		err = ioutil.WriteFile("www/" + prefix+".html", output.Bytes(), 0644)
 		check(err)
 	}
 }
