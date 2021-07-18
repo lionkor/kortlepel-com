@@ -1,10 +1,12 @@
 package main
 
 import (
+  "fmt"
 	"html/template"
-	"io"
 	"log"
-	"os"
+  "strings"
+  "bytes"
+  "io/ioutil"
 )
 
 func main() {
@@ -14,37 +16,35 @@ func main() {
 		}
 	}
 
-	templ_file, err := os.Open("template.html")
-	check(err)
-	tpl_buf := make([]byte, 0)
-	_, err = templ_file.Read(tpl)
-	check(err)
-	tpl := string(tpl_buf)
+	tpl_buf, err := ioutil.ReadFile("template.html")
+  check(err)
+  tpl := string(tpl_buf)
 
-	t, err := template.New("webpage").Parse(tpl)
+  t, err := template.New("webpage").Parse(tpl)
 	check(err)
 
-	data := struct {
-		Title   string
-		Content template.HTML
-	}{
-		Title:   "Kortlepel.com",
-		Content: `Hello, <b>Dashi</b>!!`,
-	}
+  content_file_prefixes := []string { "contacts", "index", "projects" };
 
-	dashafile, err := os.OpenFile("dasha.html", os.O_WRONLY|os.O_CREATE, 0600)
-	err = t.Execute(io.Writer(dashafile), data)
-	check(err)
+  for _, prefix := range content_file_prefixes {
+    filename := "contents/" + prefix + ".html"
+    fmt.Println("processing " + prefix + "(" + filename + ")")
+    content, err := ioutil.ReadFile(filename)
+    check(err)
+    fmt.Println("read", len(content), "characters")
 
-	noItems := struct {
-		Title   string
-		Content template.HTML
-	}{
-		Title:   "Kortlepel.com",
-		Content: `Hello, <b>Lion</b>!!`,
-	}
+    data := struct {
+      Title   string
+      Content template.HTML
+    }{
+      Title: strings.Title(prefix),
+      Content: template.HTML(content),
+    }
 
-	lionfile, err := os.OpenFile("lion.html", os.O_WRONLY|os.O_CREATE, 0600)
-	err = t.Execute(io.Writer(lionfile), noItems)
-	check(err)
+    var output bytes.Buffer
+    err = t.Execute(&output, data)
+    check(err)
+    fmt.Println("resulting size:", len(output.String()))
+    err = ioutil.WriteFile(prefix + ".html", output.Bytes(), 0644)
+	  check(err)
+  }
 }
