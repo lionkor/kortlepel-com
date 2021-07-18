@@ -20,3 +20,8 @@ jobs:
 
     - name: Build
       run: go run generator.go
+      
+    - name: Commit and Push
+      run: |
+        git commit -a -m "build"
+        git push origin deploy
