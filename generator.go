@@ -1,12 +1,13 @@
 package main
 
 import (
-  "fmt"
+	"bytes"
+	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
-  "strings"
-  "bytes"
-  "io/ioutil"
+	"strings"
+	"time"
 )
 
 func main() {
@@ -17,34 +18,38 @@ func main() {
 	}
 
 	tpl_buf, err := ioutil.ReadFile("template.html")
-  check(err)
-  tpl := string(tpl_buf)
+	check(err)
+	tpl := string(tpl_buf)
 
-  t, err := template.New("webpage").Parse(tpl)
+	t, err := template.New("webpage").Parse(tpl)
 	check(err)
 
-  content_file_prefixes := []string { "contacts", "index", "projects" };
+	content_file_prefixes := []string{"contacts", "index", "projects"}
 
-  for _, prefix := range content_file_prefixes {
-    filename := "contents/" + prefix + ".html"
-    fmt.Println("processing " + prefix + "(" + filename + ")")
-    content, err := ioutil.ReadFile(filename)
-    check(err)
-    fmt.Println("read", len(content), "characters")
+	now := time.Now()
 
-    data := struct {
-      Title   string
-      Content template.HTML
-    }{
-      Title: strings.Title(prefix),
-      Content: template.HTML(content),
-    }
+	for _, prefix := range content_file_prefixes {
+		filename := "contents/" + prefix + ".html"
+		fmt.Println("processing " + prefix + "(" + filename + ")")
+		content, err := ioutil.ReadFile(filename)
+		check(err)
+		fmt.Println("read", len(content), "characters")
 
-    var output bytes.Buffer
-    err = t.Execute(&output, data)
-    check(err)
-    fmt.Println("resulting size:", len(output.String()))
-    err = ioutil.WriteFile(prefix + ".html", output.Bytes(), 0644)
-	  check(err)
-  }
+		data := struct {
+			Title   string
+			Content template.HTML
+			Date    string
+		}{
+			Title:   strings.Title(prefix),
+			Content: template.HTML(content),
+			Date:    fmt.Sprintf("%02d/%02d/%04d", now.Day(), now.Month(), now.Year()),
+		}
+
+		var output bytes.Buffer
+		err = t.Execute(&output, data)
+		check(err)
+		fmt.Println("resulting size:", len(output.String()))
+		err = ioutil.WriteFile(prefix+".html", output.Bytes(), 0644)
+		check(err)
+	}
 }
