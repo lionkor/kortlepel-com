@@ -17,15 +17,14 @@ html, body {
 }
 
 .navbar a:hover {
-  color: var(--hover-color);
+  	color: var(--hover-color);
+	text-decoration: underline;
 }
 .navbar a:link {
-	color:  var(--pretty-grey);
-	text-decoration: underline;
+	color:  black;
 }
 .navbar a:visited { 
-	color:  var(--pretty-grey);
-	text-decoration: underline;
+	color: black;
 }
 
 .navbar-content {
