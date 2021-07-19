@@ -1,1 +1,2 @@
-go run generator.go
+go build generator.go
+generator.exe
