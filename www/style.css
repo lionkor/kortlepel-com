@@ -19,6 +19,14 @@ html, body {
 .navbar a:hover {
   color: var(--hover-color);
 }
+.navbar a:link {
+	color:  var(--pretty-grey);
+	text-decoration: underline;
+}
+.navbar a:visited { 
+	color:  var(--pretty-grey);
+	text-decoration: underline;
+}
 
 .navbar-content {
   width: fit-content;
