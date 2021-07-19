@@ -46,6 +46,18 @@ html, body {
   float: left;
 }
 
+a: link {
+	background-color: black;
+}
+
+a: visited {
+	background-color: #669999;
+}
+
+a: hover {
+	background-color: #787878;
+}
+
 .footer {
   background-color: var(--pretty-grey);
   width: 100%;
