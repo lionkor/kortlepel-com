@@ -46,16 +46,19 @@ html, body {
   float: left;
 }
 
-a: link {
+a:link {
 	color: black;
+	text-decoration: none;
 }
 
-a: visited {
+a:visited {
 	color: #669999;
+	text-decoration: none;
 }
 
-a: hover {
+a:hover {
 	color: #787878;
+	text-decoration: underline;
 }
 
 .footer {
