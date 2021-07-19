@@ -1,2 +1,4 @@
 .idea/
 www/*.html
+generator
+generator.exe
