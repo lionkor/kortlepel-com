@@ -24,7 +24,7 @@ func main() {
 	t, err := template.New("webpage").Parse(tpl)
 	check(err)
 
-	content_file_prefixes := []string{"contacts", "index", "projects"}
+	content_file_prefixes := []string{"contact", "index", "projects"}
 
 	now := time.Now()
 
