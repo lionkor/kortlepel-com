@@ -47,15 +47,15 @@ html, body {
 }
 
 a: link {
-	background-color: black;
+	color: black;
 }
 
 a: visited {
-	background-color: #669999;
+	color: #669999;
 }
 
 a: hover {
-	background-color: #787878;
+	color: #787878;
 }
 
 .footer {
