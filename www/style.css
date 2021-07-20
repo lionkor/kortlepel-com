@@ -56,12 +56,10 @@ html, body {
 }
 
 a:link {
-	color: black;
 	text-decoration: none;
 }
 
 a:visited {
-	color: #669999;
 	text-decoration: none;
 }
 
