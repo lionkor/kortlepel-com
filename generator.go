@@ -24,15 +24,19 @@ func main() {
 	t, err := template.New("webpage").Parse(tpl)
 	check(err)
 
-	content_file_prefixes := []string{"contact", "index", "projects"}
+	content_file_prefixes := []string{"contact", "index", "projects", "404"}
 
 	now := time.Now()
 
 	for _, prefix := range content_file_prefixes {
 		filename := "contents/" + prefix + ".html"
-		fmt.Println("processing " + prefix + "(" + filename + ")")
+		fmt.Println("processing " + prefix + " (" + filename + ")")
 		content, err := ioutil.ReadFile(filename)
-		check(err)
+		if err != nil {
+			fmt.Println("ERROR: file \"" + filename + "\" could not be opened. this is not a fatal error. " +
+				"output file was not created for the target \"" + prefix + "\".")
+			continue
+		}
 		fmt.Println("read", len(content), "characters")
 
 		data := struct {
