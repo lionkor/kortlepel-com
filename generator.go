@@ -24,6 +24,7 @@ func main() {
 	t, err := template.New("webpage").Parse(tpl)
 	check(err)
 
+	// add your new files here
 	content_file_prefixes := []string{"contact", "index", "projects", "404"}
 
 	now := time.Now()
@@ -53,7 +54,7 @@ func main() {
 		err = t.Execute(&output, data)
 		check(err)
 		fmt.Println("resulting size:", len(output.String()))
-		err = ioutil.WriteFile("www/" + prefix+".html", output.Bytes(), 0644)
+		err = ioutil.WriteFile("www/"+prefix+".html", output.Bytes(), 0644)
 		check(err)
 	}
 }
