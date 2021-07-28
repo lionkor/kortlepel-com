@@ -79,6 +79,7 @@ a:hover {
     width: 100%;
     height: var(--footer-height);
     max-height: var(--footer-height);
+    font-family: 'IBM Plex Sans', 'sans-serif';
 }
 
 .footer-content {
