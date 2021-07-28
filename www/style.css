@@ -94,14 +94,13 @@ a:hover {
     position: absolute;
   	left: 50%;
   	transform: translateX(-50%);
-
 }
 
 .footer-text {
     float: right;
     text-align: right;
     font-size: 80%;
-    margin: 5px 20px;
+    margin: 1px 5%;
 }
 
 .hover-image {
