@@ -69,7 +69,7 @@ func main() {
 	for _, prefix := range contentFilePrefixes {
 		filename := sourceFolder + prefix + ".html"
 		log.Println("processing " + prefix + " (" + filename + ")")
-		content, err := ioutil.ReadFile(filename)
+		content, err := os.ReadFile(filename)
 		if err != nil {
 			log.Println("ERROR: file \"" + filename + "\" could not be opened. this is not a fatal error. " +
 				"output file was not created for the target \"" + prefix + "\".")
