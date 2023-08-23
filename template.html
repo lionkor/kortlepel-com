@@ -1,51 +1,62 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
 
-    <link href="IBMPlexSansRegular.css" rel="stylesheet"/>
+    <link href="IBMPlexSansRegular.css" rel="stylesheet" />
     <title>Kortlepel - {{.Title}}</title>
-    <link href="pico.min.css" rel="stylesheet" type="text/css"/>
+    <link href="pico.min.css" rel="stylesheet" type="text/css" />
     <style>
-    main p {
-        text-align: justify;
-    }
+        main p {
+            text-align: justify;
+        }
+
+        html {
+ background: rgb(192,189,255);
+background: -moz-linear-gradient(90deg, rgba(192,189,255,0.3230158274247199) 0%, rgba(186,255,196,0.3230158274247199) 100%);
+background: -webkit-linear-gradient(90deg, rgba(192,189,255,0.3230158274247199) 0%, rgba(186,255,196,0.3230158274247199) 100%);
+background: linear-gradient(90deg, rgba(192,189,255,0.3230158274247199) 0%, rgba(186,255,196,0.3230158274247199) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c0bdff",endColorstr="#baffc4",GradientType=1); 
+        }
     </style>
 </head>
 
 <body class="container">
-<header>
-    <nav>
-        <ul>
-            <li><h2><a href="index.html" class="contrast"><strong>Kortlepel</strong><small>.com</small></a></h2></li>
-        </ul>
-        <ul>
-            <li><a href="index.html" class="contrast">Home</a></li>
-            <li><a href="projects.html" class="contrast">Projects</a></li>
-            <li><a href="contact.html" class="contrast">Contact</a></li>
-        </ul>
-    </nav>
-    <hr>
-</header>
-<main style="padding-top: 0px;">
-{{.Content}}
-</main>
-<footer>
-    <nav>
-    <ul>
-        <li><a href="https://www.linkedin.com/in/lion-kortlepel/"><img class="hover-image footer-box" alt="LinkedIn"
-                                                                   src="media/logos/linkedin.png"
-                                                                              width="30" height="30"></a></li>
-        <li><a href="https://github.com/lionkor/"><img class="hover-image footer-box" alt="GitHub"
-                                                src="media/logos/github.png" width="30" height="30"></a></li>
-    </ul>
-    <ul>
-    </ul>
-    <ul>
-        <li>Copyright &#169; 2023 Lion Kortlepel</li>
-    </ul>
-    </nav>
-</footer>
+    <header style="padding-bottom: 1em">
+        <nav>
+            <ul>
+                <li>
+                    <h2><a href="index.html" class="contrast"><strong>Kortlepel</strong><small>.com</small></a></h2>
+                </li>
+            </ul>
+            <ul>
+                <li><a href="index.html" class="contrast">Home</a></li>
+                <li><a href="projects.html" class="contrast">Projects</a></li>
+                <li><a href="contact.html" class="contrast">Contact</a></li>
+            </ul>
+        </nav>
+        <hr>
+    </header>
+    <main style="padding-top: 0px;">
+        {{.Content}}
+    </main>
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="https://www.linkedin.com/in/lion-kortlepel/"><img class="hover-image footer-box"
+                            alt="LinkedIn" src="media/logos/linkedin.png" width="30" height="30"></a></li>
+                <li><a href="https://github.com/lionkor/"><img class="hover-image footer-box" alt="GitHub"
+                            src="media/logos/github.png" width="30" height="30"></a></li>
+            </ul>
+            <ul>
+            </ul>
+            <ul>
+                <li>Copyright &#169; 2023 Lion Kortlepel</li>
+            </ul>
+        </nav>
+    </footer>
 </body>
+
 </html>
