@@ -2,15 +2,12 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"html/template"
 	"io/fs"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 )
 
 func main() {
@@ -20,84 +17,65 @@ func main() {
 		}
 	}
 
-	tplBuf, err := ioutil.ReadFile("template.html")
-	check(err)
-	tpl := string(tplBuf)
-
-	t, err := template.New("webpage").Parse(tpl)
+	tpl, err := os.ReadFile("template.html")
 	check(err)
 
-	// add your new files here
-	var contentFilePrefixes []string
+	t, err := template.New("webpage").Parse(string(tpl))
+	check(err)
 
-	now := time.Now()
 	sourceFolder := "contents/"
 	targetFolder := "www/"
+	var prefixes []string
 
 	err = filepath.Walk(sourceFolder, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
-			log.Printf("ERROR: error walking \"%s\" folder: %s", sourceFolder, err)
+			log.Printf("ERROR: walking %q: %s", sourceFolder, err)
+			return nil
 		}
 		if info.IsDir() {
-			// ensure that this directory exists in the target directory, too
-			dirPath := strings.TrimPrefix(path, sourceFolder)
-			dirPath = targetFolder + dirPath
-			dirPathStat, err := os.Stat(dirPath)
-			if err != nil || !dirPathStat.IsDir() {
-				err := os.Mkdir(dirPath, os.ModePerm)
-				if err != nil {
-					log.Printf("ERROR: could not create \"%s\": %s. This might cause issues later.", dirPath, err)
-				} else {
-					log.Printf("created folder \"%s\" for later", dirPath)
-				}
+			dir := targetFolder + strings.TrimPrefix(path, sourceFolder)
+			if _, err := os.Stat(dir); os.IsNotExist(err) {
+				os.MkdirAll(dir, os.ModePerm)
 			}
 			return nil
 		}
-		path = strings.TrimSuffix(path, filepath.Ext(path))
-		path = strings.TrimPrefix(path, sourceFolder)
-		contentFilePrefixes = append(contentFilePrefixes, path)
+		p := strings.TrimPrefix(path, sourceFolder)
+		p = strings.TrimSuffix(p, filepath.Ext(p))
+		prefixes = append(prefixes, p)
 		return nil
 	})
 	check(err)
 
-	if len(contentFilePrefixes) == 0 {
-		log.Fatalf("ERROR: \"%s\" folder is empty!", sourceFolder)
-	} else {
-		log.Println("found prefixes:", strings.Join(contentFilePrefixes, ", "))
+	if len(prefixes) == 0 {
+		log.Fatalf("contents/ folder is empty")
 	}
+	log.Println("found:", strings.Join(prefixes, ", "))
 
-	for _, prefix := range contentFilePrefixes {
-		filename := sourceFolder + prefix + ".html"
-		log.Println("processing " + prefix + " (" + filename + ")")
-		content, err := os.ReadFile(filename)
+	for _, p := range prefixes {
+		content, err := os.ReadFile(sourceFolder + p + ".html")
 		if err != nil {
-			log.Println("ERROR: file \"" + filename + "\" could not be opened. this is not a fatal error. " +
-				"output file was not created for the target \"" + prefix + "\".")
+			log.Printf("ERROR: skipping %q: %s", p, err)
 			continue
 		}
 		data := struct {
 			Title   string
 			Content template.HTML
-			Date    string
 		}{
-			Title:   strings.Title(prefix),
+			Title:   title(p),
 			Content: template.HTML(content),
-			Date:    fmt.Sprintf("%02d/%02d/%04d", now.Day(), now.Month(), now.Year()),
 		}
-
-		var output bytes.Buffer
-		err = t.Execute(&output, data)
+		var buf bytes.Buffer
+		err = t.Execute(&buf, data)
 		check(err)
-		// second replace step
-		secondTpl := output.String()
-
-		t2, err := template.New("webpage").Parse(secondTpl)
-		check(err)
-		var finalOutput bytes.Buffer
-		err = t2.Execute(&finalOutput, data)
-		check(err)
-		log.Printf("resulting size: %0.2f KB", float32(len(finalOutput.String()))/1024.0)
-		err = ioutil.WriteFile(targetFolder+prefix+".html", finalOutput.Bytes(), 0644)
-		check(err)
+		out := targetFolder + p + ".html"
+		os.WriteFile(out, buf.Bytes(), 0644)
+		log.Printf("wrote %s (%.0f KB)", out, float32(buf.Len())/1024)
 	}
+}
+
+func title(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+	return strings.ToUpper(s[:1]) + s[1:]
 }
